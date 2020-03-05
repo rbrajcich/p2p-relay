@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# CPP Client Release Dir
+/client/cpp/release
+/server/bin
