@@ -5,8 +5,8 @@
         "@semantic-release/commit-analyzer",
         "@semantic-release/release-notes-generator",
         ["@semantic-release/exec", {
-            "prepareCmd": "./prepare-release ${nextRelease.version}",
-            "publishCmd": "./publish-release ${nextRelease.version}"
+            "prepareCmd": "./prepare-release.sh ${nextRelease.version}",
+            "publishCmd": "./publish-release.sh ${nextRelease.version}"
         }],
         "@semantic-release/github"
     ]
