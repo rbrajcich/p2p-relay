@@ -6,4 +6,4 @@ docker tag server-container:latest rbrajcich/p2p-relay-server:latest
 
 # prepare publishable archives for client lib assets
 cd client-library-ubuntu
-tar -czvf p2p-relay-client-ubuntu-v$1.tar.gz
+tar -czvf p2p-relay-client-ubuntu-v$1.tar.gz *
