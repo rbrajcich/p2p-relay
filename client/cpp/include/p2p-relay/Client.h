@@ -4,6 +4,7 @@
 namespace P2PRelay {
 
     void printHelloMessage();
+    int addIntegers(int, int);
 
 } // namespace P2PRelay
 

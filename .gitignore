@@ -23,7 +23,6 @@
 # Compiled Static libraries
 *.lai
 *.la
-*.a
 *.lib
 
 # Executables
@@ -33,4 +32,5 @@
 
 # CPP Client Release Dir
 /client/cpp/release
+/client/cpp/bin
 /server/bin
