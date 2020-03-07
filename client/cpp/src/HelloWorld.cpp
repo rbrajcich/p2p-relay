@@ -6,4 +6,8 @@ namespace P2PRelay {
         std::cout << "Hello World!" << std::endl;
     }
 
+    int addIntegers(int x, int y) {
+        return x + y;
+    }
+
 }

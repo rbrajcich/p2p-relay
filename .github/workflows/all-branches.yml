@@ -1,0 +1,44 @@
+name: Run Build and Tests
+
+on:
+  push:
+    branches-ignore: [ release ]
+  pull_request:
+    branches-ignore: [ release ]
+
+jobs:
+
+  build-server:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout commit code
+      uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: ./docker-build-server.sh server-container:latest
+    - name: Archive the image
+      run: docker save -o server-container-img.tar server-container:latest
+    - name: Upload image as build artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: server-container
+        path: server-container-img.tar
+
+  build-client:
+    
+    runs-on: ubuntu-latest
+    needs: build-server
+
+    steps:
+    - name: Checkout commit code
+      uses: actions/checkout@v2
+    - name: Run client unit tests
+      run: ./client/cpp/unittest.sh
+    - name: Build the client library
+      run: ./client/cpp/build.sh
+    - name: Upload the lib as build artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: client-library
+        path: ./client/cpp/release
