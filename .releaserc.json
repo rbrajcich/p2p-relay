@@ -8,6 +8,10 @@
             "prepareCmd": "./prepare-release.sh ${nextRelease.version}",
             "publishCmd": "./publish-release.sh ${nextRelease.version}"
         }],
-        "@semantic-release/github"
+        ["@semantic-release/github", {
+            "assets": [
+                {"path": "client-library-ubuntu", "label": "client-lib-label"}
+            ]
+        }]
     ]
 }

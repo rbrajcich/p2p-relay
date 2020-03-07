@@ -38,7 +38,7 @@ jobs:
     - name: Upload the lib as build artifact
       uses: actions/upload-artifact@v1
       with:
-        name: client-library
+        name: client-library-ubuntu
         path: ./client/cpp/release
 
   release:
@@ -55,6 +55,10 @@ jobs:
         name: server-container
     - name: Restore server image from archive
       run: docker load -i server-container/server-container-img.tar
+    - name: Download ubuntu client lib artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: client-library-ubuntu
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:
