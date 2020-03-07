@@ -47,8 +47,13 @@ jobs:
     needs: build-client
     
     steps:
-    #- name: Checkout commit code
-    #  uses: actions/checkout@v2
+    - name: Checkout commit code
+      uses: actions/checkout@v2
+    - name: Download server container artifact
+      uses: actions/download-artifact@v1
+        name: server-container
+    - name: Restore server image from archive
+      run: docker load -i server-container-img.tar
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:
@@ -56,4 +61,5 @@ jobs:
     - name: Release with Semantic Release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       run: npx semantic-release

@@ -1,9 +1,12 @@
 {
     "branches": ["release"],
-    "repositoryUrl": "git@github.com:rbrajcich/p2p-relay.git",
     "plugins": [
         "@semantic-release/commit-analyzer",
         "@semantic-release/release-notes-generator",
+        ["@semantic-release/exec", {
+            "prepareCmd": "./prepare-release ${nextRelease.version}",
+            "publishCmd": "./publish-release ${nextRelease.version}"
+        }],
         "@semantic-release/github"
     ]
 }
