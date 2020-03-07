@@ -7,6 +7,10 @@
     <img alt="Release"
          src="https://github.com/rbrajcich/p2p-relay/workflows/Release/badge.svg?branch=release">
   </a>  
+  <a href="https://hub.docker.com/r/rbrajcich/p2p-relay-server/tags">
+    <img alt="Latest Server Docker Image"
+         src="https://img.shields.io/docker/v/rbrajcich/p2p-relay-server?color=%230db7ed&label=Latest%20Server%20Image&logo=Docker">
+  </a>  
   <a href="https://github.com/semantic-release/semantic-release">
     <img alt="semantic-release"
          src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg">
