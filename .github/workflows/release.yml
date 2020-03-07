@@ -53,9 +53,8 @@ jobs:
       uses: actions/download-artifact@v1
       with:
         name: server-container
-        path: server-container-img.tar
     - name: Restore server image from archive
-      run: docker load -i server-container-img.tar
+      run: docker load -i server-container/server-container-img.tar
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:
