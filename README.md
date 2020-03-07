@@ -8,7 +8,6 @@
          src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg">
   </a>
 </p>
-
 # p2p-relay
 A client API and server allowing two clients to communicate on an abstracted peer-to-peer connection without the obstacles imposed by being behind a router NAT or Firewall.
 
