@@ -47,8 +47,8 @@ jobs:
     needs: build-client
     
     steps:
-    - name: Checkout commit code
-      uses: actions/checkout@v2
+    #- name: Checkout commit code
+    #  uses: actions/checkout@v2
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:
