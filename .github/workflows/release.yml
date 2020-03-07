@@ -59,7 +59,11 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 12
-    - name: Release with Semantic Release
+    - name: Install semantic-release and plugins
+      run: |
+        npm install -g semantic-release@17
+        npm install -g @semantic-release/exec@5
+    - name: Release with semantic-release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
