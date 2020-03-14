@@ -1,8 +1,6 @@
 #!/bin/bash
 
-BASE_DIR=$(dirname $0)
-
-cd $BASE_DIR
+cd /p2p-relay/server
 
 # Delete build directories if they already exist
 if [ -d bin ]; then rm -rf bin; fi

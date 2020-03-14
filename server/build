@@ -1,0 +1,51 @@
+#!/bin/bash
+
+USAGE="./build.sh <container|unittests|coverage|upload-cov>"
+
+if [ $# != 1 ]; then
+echo "Error - Incorrect number of arguments."
+echo "Usage: ${USAGE}"
+exit 1
+fi
+
+BUILDER=p2p-server-build-container:latest
+BASE_DIR=$(dirname $0)
+cd "${BASE_DIR}/.."
+
+# Create the build container if not yet there
+if [ "$(docker images -q ${BUILDER})" == "" ]; then
+docker build -f ./Dockerfile . --tag $BUILDER
+fi
+
+if [ $1 == "unittests" ]; then
+
+# Run the unit tests in the build container
+docker run --rm --mount type=bind,source="$(pwd)",target=/p2p-relay \
+    -w /p2p-relay p2p-server-build-container:latest \
+    sh ./server/build-container-scripts/exec_unittests.sh
+
+elif [ $1 == "coverage" ]; then
+
+# Run the unit tests in the build container
+docker run --rm --mount type=bind,source="$(pwd)",target=/p2p-relay \
+    -w /p2p-relay p2p-server-build-container:latest \
+    sh ./server/build-container-scripts/exec_unittest_lcov.sh
+
+elif [ $1 == "upload-cov" ]; then
+
+./server/build-container-scripts/exec_unittest_upload.sh
+
+elif [ $1 == "container" ]; then
+
+# Run the executable in the build container
+docker run --rm --mount type=bind,source="$(pwd)",target=/p2p-relay \
+    -w /p2p-relay p2p-server-build-container:latest \
+    sh ./server/build-container-scripts/exec_build.sh
+
+# Copy the executable into an alpine container for deploy
+docker build --tag p2p-server-container:latest -f ./server/Dockerfile \
+    ./server/
+else
+echo "Error - Unrecognized option: ${1}"
+echo "Usage: ${USAGE}"
+fi
