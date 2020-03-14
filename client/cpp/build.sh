@@ -15,6 +15,8 @@ mkdir release
 # Navigate to obj dir
 cd obj
 
+exit 1
+
 # Build object files and output in obj/ directory
 g++ -c -I ../src ../src/*.cpp 
 
