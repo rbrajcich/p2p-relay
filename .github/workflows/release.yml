@@ -18,11 +18,11 @@ jobs:
     - name: Compile and upload unittest coverage
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      run: ./server/build coverage && ./server/build upload-cov
+      run: ./server/build unittest-cov && ./server/build upload-unittest-cov
     - name: Build the Server Container
       run: ./server/build container
     - name: Archive the image
-      run: docker save -o server-container-img.tar p2p-server-container:latest p2p-server-build-container:latest
+      run: docker save -o server-container-img.tar p2p-server-container:latest
     - name: Upload image as build artifact
       uses: actions/upload-artifact@v1
       with:
