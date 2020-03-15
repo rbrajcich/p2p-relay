@@ -40,7 +40,7 @@ jobs:
     - name: Run client unit tests
       run: ./client/cpp/build unittests
     - name: Install lcov
-      run: apt-get install lcov
+      run: sudo apt-get install lcov
     - name: Compile and upload unittest coverage
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
