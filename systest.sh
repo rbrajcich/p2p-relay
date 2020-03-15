@@ -28,7 +28,10 @@ elif [ $1 == "generate-cov" ]; then
 
 elif [ $1 == "upload-cov" ]; then
 
+echo "./client/cpp/build upload-systest-cov"
 ./client/cpp/build upload-systest-cov
+
+echo "./server/build upload-systest-cov"
 ./server/build upload-systest-cov
 
 else
