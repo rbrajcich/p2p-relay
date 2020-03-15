@@ -13,10 +13,18 @@ jobs:
     steps:
     - name: Checkout commit code
       uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: ./docker-build-server.sh server-container:latest
+    - name: Install lcov
+      run: sudo apt-get install lcov
+    - name: Run unittests
+      run: ./server/build unittests
+    - name: Compile and upload unittest coverage
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      run: ./server/build unittest-cov && ./server/build upload-unittest-cov
+    - name: Build the Server Container
+      run: ./server/build container
     - name: Archive the image
-      run: docker save -o server-container-img.tar server-container:latest
+      run: docker save -o server-container-img.tar p2p-server-container:latest
     - name: Upload image as build artifact
       uses: actions/upload-artifact@v1
       with:
@@ -31,21 +39,33 @@ jobs:
     steps:
     - name: Checkout commit code
       uses: actions/checkout@v2
+    - name: Install lcov
+      run: sudo apt-get install lcov
     - name: Run client unit tests
-      run: ./client/cpp/unittest.sh
+      run: ./client/cpp/build unittests
+    - name: Compile and upload unittest coverage
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      run: ./client/cpp/build unittest-cov && ./client/cpp/build upload-unittest-cov
+    - name: Run system tests
+      run: ./systest.sh exec
+    - name: Compile and upload systest coverage
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      run: ./systest.sh generate-cov && ./systest.sh upload-cov
     - name: Build the client library
-      run: ./client/cpp/build.sh
+      run: ./client/cpp/build library
     - name: Upload the lib as build artifact
       uses: actions/upload-artifact@v1
       with:
-        name: client-library
+        name: client-library-ubuntu
         path: ./client/cpp/release
 
   release:
 
     runs-on: ubuntu-latest
     needs: build-client
-    
+
     steps:
     - name: Checkout commit code
       uses: actions/checkout@v2
@@ -55,6 +75,10 @@ jobs:
         name: server-container
     - name: Restore server image from archive
       run: docker load -i server-container/server-container-img.tar
+    - name: Download ubuntu client lib artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: client-library-ubuntu
     - name: Setup Node.js
       uses: actions/setup-node@v1
       with:

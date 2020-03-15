@@ -3,6 +3,9 @@
     <img alt="Run Tests and Build"
          src="https://github.com/rbrajcich/p2p-relay/workflows/Run%20Tests%20and%20Build/badge.svg?branch=master">
   </a>
+  <a href="https://codecov.io/gh/rbrajcich/p2p-relay">
+    <img src="https://codecov.io/gh/rbrajcich/p2p-relay/branch/release/graph/badge.svg" />
+  </a>
   <a href="https://github.com/rbrajcich/p2p-relay/actions?query=workflow%3ARelease+branch%3Arelease">
     <img alt="Release"
          src="https://github.com/rbrajcich/p2p-relay/workflows/Release/badge.svg?branch=release">
