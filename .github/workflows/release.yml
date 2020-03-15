@@ -38,9 +38,13 @@ jobs:
     - name: Checkout commit code
       uses: actions/checkout@v2
     - name: Run client unit tests
-      run: ./client/cpp/unittest.sh
+      run: ./client/cpp/build unittests
+    - name: Compile and upload unittest coverage
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      run: ./client/cpp/build coverage && ./client/cpp/build upload-cov
     - name: Build the client library
-      run: ./client/cpp/build.sh
+      run: ./client/cpp/build library
     - name: Upload the lib as build artifact
       uses: actions/upload-artifact@v1
       with:

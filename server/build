@@ -1,6 +1,6 @@
 #!/bin/bash
 
-USAGE="./build.sh <container|unittests|coverage|upload-cov>"
+USAGE="./build <container|unittests|coverage|upload-cov>"
 
 if [ $# != 1 ]; then
 echo "Error - Incorrect number of arguments."
@@ -22,25 +22,25 @@ if [ $1 == "unittests" ]; then
 # Run the unit tests in the build container
 docker run --rm --mount type=bind,source="$(pwd)",target=/p2p-relay \
     -w /p2p-relay p2p-server-build-container:latest \
-    sh ./server/build-container-scripts/exec_unittests.sh
+    sh ./server/scripts/exec_unittests.sh
 
 elif [ $1 == "coverage" ]; then
 
 # Run the unit tests in the build container
 docker run --rm --mount type=bind,source="$(pwd)",target=/p2p-relay \
     -w /p2p-relay p2p-server-build-container:latest \
-    sh ./server/build-container-scripts/exec_unittest_lcov.sh
+    sh ./server/scripts/exec_unittest_lcov.sh
 
 elif [ $1 == "upload-cov" ]; then
 
-./server/build-container-scripts/exec_unittest_upload.sh
+./server/scripts/exec_unittest_upload.sh
 
 elif [ $1 == "container" ]; then
 
 # Run the executable in the build container
 docker run --rm --mount type=bind,source="$(pwd)",target=/p2p-relay \
     -w /p2p-relay p2p-server-build-container:latest \
-    sh ./server/build-container-scripts/exec_build.sh
+    sh ./server/scripts/exec_build.sh
 
 # Copy the executable into an alpine container for deploy
 docker build --tag p2p-server-container:latest -f ./server/Dockerfile \

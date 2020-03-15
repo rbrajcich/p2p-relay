@@ -1,0 +1,33 @@
+#!/bin/bash
+
+USAGE="./build <unittests|library|coverage>"
+
+if [ $# != 1 ]; then
+echo "Error - Incorrect number of arguments."
+echo "Usage: ${USAGE}"
+exit 1
+fi
+
+BASE_DIR=$(dirname $0)
+cd "${BASE_DIR}/../.."
+
+if [ $1 == "unittests" ]; then
+
+./client/cpp/scripts/exec_unittests.sh
+
+elif [ $1 == "library" ]; then
+
+./client/cpp/scripts/exec_build.sh
+
+elif [ $1 == "coverage" ]; then
+
+./client/cpp/scripts/exec_unittest_lcov.sh
+
+elif [ $1 == "upload-cov" ]; then
+
+./client/cpp/scripts/exec_unittest_upload.sh
+
+else
+echo "Error - Unrecognized option: ${1}"
+echo "Usage: ${USAGE}"
+fi

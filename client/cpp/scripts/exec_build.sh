@@ -1,8 +1,7 @@
 #!/bin/bash
 
 BASE_DIR=$(dirname $0)
-
-cd $BASE_DIR
+cd "${BASE_DIR}/.."
 
 # Delete build directories if they already exist
 if [ -d obj ]; then rm -rf obj; fi
