@@ -1,5 +1,5 @@
-#ifndef P2P_RELAY__Sample_H
-#define P2P_RELAY__Sample_H
+#ifndef P2P_RELAY__SAMPLE_H
+#define P2P_RELAY__SAMPLE_H
 
 namespace P2PRelay {
 

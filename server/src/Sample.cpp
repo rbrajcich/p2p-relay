@@ -1,5 +1,8 @@
 #include <iostream>
 #include <csignal>
+#include <unistd.h>
+
+#include "Sample.h"
 
 bool running = true;
 
@@ -13,9 +16,16 @@ int entry() {
     // Register SIGTERM handler
     signal(SIGTERM, handleSIGTERM);
 
-#ifndef P2P_RELAY_UNIT_TEST
-    std::cout << "Hello From Server!" << std::endl;
-#endif
+    int i = 0;
+
+    while (running) {
+        std::cout << "Running " << ++i << " seconds" << std::endl;
+        usleep(1000000);
+    }
 
     return 0;
+}
+
+int addIntegers(int x, int y) {
+    return x + y;
 }

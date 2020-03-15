@@ -22,7 +22,7 @@ jobs:
     - name: Build the Server Container
       run: ./server/build container
     - name: Archive the image
-      run: docker save -o server-container-img.tar p2p-server-container:latest
+      run: docker save -o server-container-img.tar p2p-server-container:latest p2p-server-build-container:latest
     - name: Upload image as build artifact
       uses: actions/upload-artifact@v1
       with:

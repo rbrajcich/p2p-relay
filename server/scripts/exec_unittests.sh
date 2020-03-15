@@ -8,8 +8,8 @@ if [ -d obj ]; then rm -rf obj; fi
 
 # Make build output directories
 mkdir bin
-mkdir obj
-mkdir obj/test
+mkdir -m 777 obj
+mkdir -m 777 obj/test
 
 # Find possible library locations if they are present
 if [ -d ./lib ]

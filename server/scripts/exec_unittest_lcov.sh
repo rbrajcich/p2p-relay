@@ -1,11 +1,10 @@
 #!/bin/bash
 
-cd /p2p-relay
+BASE_DIR=$(dirname $0)
+cd "${BASE_DIR}/../.."
 
-if [ ! -d lcov  ]; then mkdir lcov; fi
-if [ ! -d lcov/server-ut-html  ]; then mkdir lcov/server-ut-html; fi
-
-chmod 777 lcov
+if [ ! -d lcov  ]; then mkdir -m 777 lcov; fi
+if [ ! -d lcov/server-ut-html  ]; then mkdir -m 777 lcov/server-ut-html; fi
 
 # Compile the lcov file and generate html
 lcov --capture --directory server --output-file lcov/server_ut.info
