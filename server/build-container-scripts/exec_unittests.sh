@@ -47,4 +47,4 @@ g++ -DP2P_RELAY_UNIT_TEST=1 -I ./server/test \
     ./server/bin/p2p-server-test -pthread
 
 # Run the UTs
-./server/bin/p2p-server-test
+exec ./server/bin/p2p-server-test
