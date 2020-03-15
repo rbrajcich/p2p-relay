@@ -1,13 +1,20 @@
 {
-    "branches": ["release"],
-    "repositoryUrl": "git@github.com:rbrajcich/p2p-relay.git",
-    "plugins": [
-        "@semantic-release/commit-analyzer",
-        "@semantic-release/release-notes-generator",
-        ["@semantic-release/exec", {
-            "prepareCmd": "./prepare-release.sh ${nextRelease.version}",
-            "publishCmd": "./publish-release.sh ${nextRelease.version}"
-        }],
-        "@semantic-release/github"
-    ]
+  "branches": ["release"],
+  "repositoryUrl": "git@github.com:rbrajcich/p2p-relay.git",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    ["@semantic-release/exec", {
+      "prepareCmd": "./prepare-release.sh ${nextRelease.version}",
+      "publishCmd": "./publish-release.sh ${nextRelease.version}"
+    }],
+    ["@semantic-release/github", {
+      "assets": [
+        {
+          "path": "client-library-ubuntu/p2p-relay-client-*.tar.gz", 
+          "label": "Client lib - Ubuntu"
+        }
+      ]
+    }]
+  ]
 }

@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
-#include "p2p-relay/Client.h"
+#include "p2p-relay/ClientAPI.h"
 
 using namespace P2PRelay;
 
 TEST(MyTestSuite, MyTestCase) {
-    EXPECT_EQ(11, addIntegers(5, 6));
+    EXPECT_EQ(10, sampleApiFunction());
 }

@@ -30,7 +30,10 @@
 *.out
 *.app
 
-# CPP Client Release Dir
+# Custom
 /client/cpp/release
 /client/cpp/bin
+/client/cpp/obj
 /server/bin
+/server/obj
+/lcov

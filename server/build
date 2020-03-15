@@ -1,0 +1,70 @@
+#!/bin/bash
+
+USAGE="./build <container|unittests|unittest-cov|upload-unittest-cov|start-systest|stop-systest|systest-cov|upload-systest-cov>"
+
+if [ $# != 1 ]; then
+echo "Error - Incorrect number of arguments."
+echo "Usage: ${USAGE}"
+exit 1
+fi
+
+BUILDER=p2p-server-build-container:latest
+BASE_DIR=$(dirname $0)
+cd "${BASE_DIR}/.."
+
+# Create the build container if not yet there
+if [ "$(docker images -q ${BUILDER})" == "" ]; then
+docker build -f ./Dockerfile . --tag $BUILDER
+fi
+
+if [ $1 == "unittests" ]; then
+
+# Run the unit tests in the build container
+docker run --rm --mount type=bind,source="$(pwd)",target=/p2p-relay \
+    -w /p2p-relay p2p-server-build-container:latest \
+    sh ./server/scripts/exec_unittests.sh
+
+elif [ $1 == "unittest-cov" ]; then
+
+./server/scripts/exec_unittest_lcov.sh
+
+elif [ $1 == "upload-unittest-cov" ]; then
+
+./server/scripts/exec_unittest_upload.sh
+
+elif [ $1 == "container" ]; then
+
+# Run the executable in the build container
+docker run --rm --mount type=bind,source="$(pwd)",target=/p2p-relay \
+    -w /p2p-relay p2p-server-build-container:latest \
+    sh ./server/scripts/exec_build.sh
+
+# Copy the executable into a clean container for deploy
+docker build --tag p2p-server-container:latest -f ./server/Dockerfile \
+    ./server/
+
+elif [ $1 == "start-systest" ]; then
+
+# Run the executable in the build container
+docker run -d --rm --name p2p-server-systest-container \
+    --mount type=bind,source="$(pwd)",target=/p2p-relay \
+    -w /p2p-relay p2p-server-build-container:latest \
+    bash ./server/scripts/exec_systests.sh
+
+elif [ $1 == "stop-systest" ]; then
+
+# Stop and remove the systest container
+docker stop p2p-server-systest-container
+
+elif [ $1 == "systest-cov" ]; then
+
+./server/scripts/exec_systest_lcov.sh
+
+elif [ $1 == "upload-systest-cov" ]; then
+
+./server/scripts/exec_systest_upload.sh
+
+else
+echo "Error - Unrecognized option: ${1}"
+echo "Usage: ${USAGE}"
+fi
