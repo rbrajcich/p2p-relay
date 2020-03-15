@@ -1,6 +1,6 @@
 #!/bin/bash
 
-USAGE="./build <unittests|library|coverage>"
+USAGE="./build <library|unittests|unittest-cov|upload-unittest-cov|systests|systest-cov|upload-systest-cov>"
 
 if [ $# != 1 ]; then
 echo "Error - Incorrect number of arguments."
@@ -19,13 +19,25 @@ elif [ $1 == "library" ]; then
 
 ./client/cpp/scripts/exec_build.sh
 
-elif [ $1 == "coverage" ]; then
+elif [ $1 == "unittest-cov" ]; then
 
 ./client/cpp/scripts/exec_unittest_lcov.sh
 
-elif [ $1 == "upload-cov" ]; then
+elif [ $1 == "upload-unittest-cov" ]; then
 
 ./client/cpp/scripts/exec_unittest_upload.sh
+
+elif [ $1 == "systests" ]; then
+
+./client/cpp/scripts/exec_systests.sh
+
+elif [ $1 == "systest-cov" ]; then
+
+./client/cpp/scripts/exec_systest_lcov.sh
+
+elif [ $1 == "upload-systest-cov" ]; then
+
+./client/cpp/scripts/exec_systest_upload.sh
 
 else
 echo "Error - Unrecognized option: ${1}"

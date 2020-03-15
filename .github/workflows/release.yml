@@ -37,14 +37,20 @@ jobs:
     steps:
     - name: Checkout commit code
       uses: actions/checkout@v2
-    - name: Run client unit tests
-      run: ./client/cpp/build unittests
     - name: Install lcov
       run: sudo apt-get install lcov
+    - name: Run client unit tests
+      run: ./client/cpp/build unittests
     - name: Compile and upload unittest coverage
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      run: ./client/cpp/build coverage && ./client/cpp/build upload-cov
+      run: ./client/cpp/build unittest-cov && ./client/cpp/build upload-unittest-cov
+    - name: Run system tests
+      run: ./systest.sh exec
+    - name: Compile and upload systest coverage
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      run: ./systest.sh generate-cov && ./systest.sh upload-cov
     - name: Build the client library
       run: ./client/cpp/build library
     - name: Upload the lib as build artifact
