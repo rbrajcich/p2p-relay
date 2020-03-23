@@ -24,6 +24,9 @@ g++ -c -DP2P_RELAY_SYS_TEST=1 -I ../src \
 # Navigate to root of repository
 cd ../..
 
+# Make directory for systest logs if not there
+if [ ! -d logs  ]; then mkdir logs; fi
+
 # Build executable with gcov included
 g++ -DP2P_RELAY_SYS_TEST=1 -I ./server/src -I -fprofile-arcs -ftest-coverage \
     -lgcov --coverage ./server/obj/*.o ./cpp-common-lib/**/!(libgtest_main).a \
