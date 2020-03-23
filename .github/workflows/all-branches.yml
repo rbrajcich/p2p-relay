@@ -21,6 +21,11 @@ jobs:
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: ./server/build unittest-cov && ./server/build upload-unittest-cov
+    - name: Upload unittest log as build artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: server-unittest-log
+        path: logs/server-unittests.log
     - name: Build the Server Container
       run: ./server/build container
     - name: Archive the image
@@ -53,6 +58,11 @@ jobs:
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       run: ./systest.sh generate-cov && ./systest.sh upload-cov
+    - name: Upload server systest log as build artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: server-systest-log
+        path: logs/server-systests.log
     - name: Build the client library
       run: ./client/cpp/build library
     - name: Upload the lib as build artifact

@@ -36,8 +36,11 @@ g++ -c -DP2P_RELAY_UNIT_TEST=1 -I ../../test \
     -I ../../include -I ../../src \
     ../../test/*.cpp
 
-# Navigate to root of repository  
+# Navigate to root of repository
 cd ../../..
+
+# Make directory for unittest logs if not there
+if [ ! -d logs ]; then mkdir logs; fi
 
 # Build executable with gcov
 g++ -DP2P_RELAY_UNIT_TEST=1 -I ./server/test \
