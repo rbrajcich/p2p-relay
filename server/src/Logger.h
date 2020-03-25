@@ -7,6 +7,10 @@
 // For easy conversion of various types to strings when logging messages
 #define STR(x) std::to_string(x)
 
+// Log output file paths for system and unit tests
+#define UNIT_TEST_LOG_OUTPUT_FILE "logs/server-unittests.log"
+#define SYS_TEST_LOG_OUTPUT_FILE "logs/server-systests.log"
+
 /*
  * An enumeration representing the log levels available. The entries
  * are in order of least verbose to most verbose logging.
@@ -84,6 +88,13 @@ class Logger {
      */
     void clearLogs();
 
+    /*
+     * For unit test use only:
+     * Destroys the current global logger instance if it exists, guaranteeing
+     * a new logger is created by the next call to getGlobalLogger()
+     */
+    static void destroyLogger();
+
     #endif // P2P_RELAY_UNIT_TEST
 
  private:
@@ -111,9 +122,14 @@ class Logger {
     LogLevel currentLogLevel;
 
     /*
-     * The log file in use by the global logger instance
+     * For unit and system test use only:
+     * The log file in use by the global logger. This field is static
+     * so the output file is not overwritten during unit tests
+     * if they destroy and re-create the global logger instance
      */
-    std::ofstream logOutputFile;
+    #if defined(P2P_RELAY_UNIT_TEST) || defined(P2P_RELAY_SYS_TEST)
+    static std::ofstream logOutputFile;
+    #endif // defined(P2P_RELAY_UNIT_TEST) || defined(P2P_RELAY_SYS_TEST)
 
     /*
      * Log the given message string targeting the given log level

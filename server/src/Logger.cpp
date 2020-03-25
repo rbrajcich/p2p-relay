@@ -2,19 +2,24 @@
 
 #include <iostream>
 
-#define UNIT_TEST_LOG_OUTPUT_FILE "logs/server-unittests.log"
-#define SYS_TEST_LOG_OUTPUT_FILE "logs/server-systests.log"
-
 Logger *Logger::loggerInst = nullptr;
+
+#if defined(P2P_RELAY_UNIT_TEST) || defined(P2P_RELAY_SYS_TEST)
+std::ofstream Logger::logOutputFile;
+#endif
 
 Logger::Logger() {
     currentLogLevel = LogLevel::Info;
 
     #if defined(P2P_RELAY_UNIT_TEST)
-    logOutputFile.open(UNIT_TEST_LOG_OUTPUT_FILE);
+    if (!logOutputFile.is_open()) {
+        logOutputFile.open(UNIT_TEST_LOG_OUTPUT_FILE);
+    }
     logs = "";
     #elif defined(P2P_RELAY_SYS_TEST)
-    logOutputFile.open(SYS_TEST_LOG_OUTPUT_FILE);
+    if (!logOutputFile.is_open()) {
+        logOutputFile.open(SYS_TEST_LOG_OUTPUT_FILE);
+    }
     #endif
 
 }
@@ -66,6 +71,7 @@ void Logger::debug(const std::string &logString) {
 }
 
 #ifdef P2P_RELAY_UNIT_TEST
+// LCOV_EXCL_START
 
 const std::string Logger::getLogs() {
     return logs;
@@ -75,4 +81,12 @@ void Logger::clearLogs() {
     logs = "";
 }
 
+void Logger::destroyLogger() {
+    if (loggerInst != nullptr) {
+        delete loggerInst;
+        loggerInst = nullptr;
+    }
+}
+
+// LCOV_EXCL_STOP
 #endif

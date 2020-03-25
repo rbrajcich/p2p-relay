@@ -1,6 +1,7 @@
 #include <csignal>
 
 #include "Logger.h"
+#include "SessionTable.h"
 
 bool running = true;
 
@@ -20,9 +21,12 @@ int entry() {
     logger.info("**        Starting P2P Relay Server        **");
     logger.info("*********************************************");
 
+    SessionTable *sessionTable = new SessionTable();
+
     while (running) {
         // Do nothing
     }
 
+    delete sessionTable;
     return 0;
 }

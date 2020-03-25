@@ -14,6 +14,7 @@ static void logMessages(Logger &logger) {
 }
 
 TEST(LoggerTests, LogLevelDefault) {
+    Logger::destroyLogger(); // Ensure we create a new logger
     Logger &logger = Logger::getGlobalLogger();
     EXPECT_EQ(logger.getLogLevel(), LogLevel::Info);
 }
