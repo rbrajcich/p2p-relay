@@ -1,5 +1,4 @@
-#include "gtest/gtest.h"
-#include "Logger.h"
+#include "Unittest.h"
 
 #include <string>
 
@@ -13,13 +12,13 @@ static void logMessages(Logger &logger) {
     logger.debug("debug log msg");
 }
 
-TEST(LoggerTests, LogLevelDefault) {
+LOGGED_TEST(LoggerTests, LogLevelDefault) {
     Logger::destroyLogger(); // Ensure we create a new logger
     Logger &logger = Logger::getGlobalLogger();
     EXPECT_EQ(logger.getLogLevel(), LogLevel::Info);
 }
 
-TEST(LoggerTests, LogLevelNone) {
+LOGGED_TEST(LoggerTests, LogLevelNone) {
     Logger &logger = Logger::getGlobalLogger();
     logger.setLogLevel(LogLevel::None);
     logger.clearLogs();
@@ -27,7 +26,7 @@ TEST(LoggerTests, LogLevelNone) {
     EXPECT_EQ(logger.getLogs(), "");
 }
 
-TEST(LoggerTests, LogLevelError) {
+LOGGED_TEST(LoggerTests, LogLevelError) {
     Logger &logger = Logger::getGlobalLogger();
     logger.setLogLevel(LogLevel::Error);
     logger.clearLogs();
@@ -35,7 +34,7 @@ TEST(LoggerTests, LogLevelError) {
     EXPECT_EQ(logger.getLogs(), err_msg);
 }
 
-TEST(LoggerTests, LogLevelInfo) {
+LOGGED_TEST(LoggerTests, LogLevelInfo) {
     Logger &logger = Logger::getGlobalLogger();
     logger.setLogLevel(LogLevel::Info);
     logger.clearLogs();
@@ -43,7 +42,7 @@ TEST(LoggerTests, LogLevelInfo) {
     EXPECT_EQ(logger.getLogs(), err_msg + inf_msg);
 }
 
-TEST(LoggerTests, LogLevelDebug) {
+LOGGED_TEST(LoggerTests, LogLevelDebug) {
     Logger &logger = Logger::getGlobalLogger();
     logger.setLogLevel(LogLevel::Debug);
     logger.clearLogs();
@@ -51,7 +50,7 @@ TEST(LoggerTests, LogLevelDebug) {
     EXPECT_EQ(logger.getLogs(), err_msg + inf_msg + dbg_msg);
 }
 
-TEST(LoggerTests, LogMacroSTR) {
+LOGGED_TEST(LoggerTests, LogMacroSTR) {
     Logger &logger = Logger::getGlobalLogger();
     logger.setLogLevel(LogLevel::Debug);
     logger.clearLogs();
