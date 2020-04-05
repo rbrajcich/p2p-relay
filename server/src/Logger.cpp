@@ -2,6 +2,14 @@
 
 #include <iostream>
 
+#include "Util.h"
+
+/* 
+ * The environment variable that can be set to override the
+ * default log level "Info". debug | info | error | none
+ */
+#define LOGGER_LOG_LEVEL_ENV_VAR "P2P_SERVER_LOG_LEVEL"
+
 Logger *Logger::loggerInst = nullptr;
 
 #if defined(P2P_RELAY_UNIT_TEST) || defined(P2P_RELAY_SYS_TEST)
@@ -9,7 +17,9 @@ std::ofstream Logger::logOutputFile;
 #endif
 
 Logger::Logger() {
-    currentLogLevel = LogLevel::Info;
+
+    bool foundInEnv = false;
+    std::string envVal;
 
     #if defined(P2P_RELAY_UNIT_TEST)
     if (!logOutputFile.is_open()) {
@@ -22,6 +32,39 @@ Logger::Logger() {
     }
     #endif
 
+    foundInEnv = Util::getLowercaseStrFromEnv(LOGGER_LOG_LEVEL_ENV_VAR,
+                                              &envVal);
+
+    /* LCOV_EXCL_START */
+    currentLogLevel = LogLevel::Debug;
+    if (foundInEnv) {
+        if (envVal == "debug") {
+            log(LogLevel::Debug,
+                "\nStarting logger at 'Debug' level from env variable\n");
+            currentLogLevel = LogLevel::Debug;
+        } else if (envVal == "info") {
+            log(LogLevel::Debug,
+                "\nStarting logger at 'Info' level from env variable\n");
+            currentLogLevel = LogLevel::Info;
+        } else if (envVal == "error") {
+            log(LogLevel::None,
+                "\nStarting logger at 'Error' level from env variable\n");
+            currentLogLevel = LogLevel::Error;
+        } else if (envVal == "none") {
+            log(LogLevel::Debug,
+                "\nLogger configured to 'None' by env variable\n");
+            currentLogLevel = LogLevel::None;
+        } else {
+            log(LogLevel::Debug,
+                "\nLog level default to 'Info' due to invalid env variable\n");
+            currentLogLevel = LogLevel::Info;
+        }
+    } else {
+        log(LogLevel::Debug,
+            "\nNo env variable found. Log level defaulting to 'Info'\n");
+        currentLogLevel = LogLevel::Info;
+    }
+    /* LCOV_EXCL_STOP */
 }
 
 Logger &Logger::getGlobalLogger() {
@@ -33,10 +76,6 @@ Logger &Logger::getGlobalLogger() {
 
 void Logger::setLogLevel(LogLevel newLevel) {
     currentLogLevel = newLevel;
-}
-
-const LogLevel Logger::getLogLevel() {
-    return currentLogLevel;
 }
 
 void Logger::log(LogLevel msgLogLevel, const std::string &logString) {
@@ -79,13 +118,6 @@ const std::string Logger::getLogs() {
 
 void Logger::clearLogs() {
     logs = "";
-}
-
-void Logger::destroyLogger() {
-    if (loggerInst != nullptr) {
-        delete loggerInst;
-        loggerInst = nullptr;
-    }
 }
 
 // LCOV_EXCL_STOP

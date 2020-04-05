@@ -32,5 +32,7 @@ g++ -DP2P_RELAY_SYS_TEST=1 -I ./server/src -I -fprofile-arcs -ftest-coverage \
     -lgcov --coverage ./server/obj/*.o ./cpp-common-lib/**/!(libgtest_main).a \
     -o ./server/bin/p2p-server-test -pthread
 
+export P2P_SERVER_LOG_LEVEL=debug
+
 # Execute sys tests
 exec ./server/bin/p2p-server-test

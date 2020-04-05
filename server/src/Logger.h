@@ -52,11 +52,6 @@ class Logger {
      * entries in the enum LogLevel
      */
     void setLogLevel(LogLevel newLevel);
-    
-    /*
-     * Returns the current log level setting of the global logger instance
-     */
-    const LogLevel getLogLevel();
 
     /*
      * Logs the given string at the 'Error' log level.
@@ -87,13 +82,6 @@ class Logger {
      * Clears the internal buffer copy of logs to the empty string "" 
      */
     void clearLogs();
-
-    /*
-     * For unit test use only:
-     * Destroys the current global logger instance if it exists, guaranteeing
-     * a new logger is created by the next call to getGlobalLogger()
-     */
-    static void destroyLogger();
 
     #endif // P2P_RELAY_UNIT_TEST
 

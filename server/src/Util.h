@@ -2,6 +2,7 @@
 #define P2P_RELAY__UTIL_H
 
 #include <cstdint>
+#include <string>
 
 class Util {
  public:
@@ -13,6 +14,13 @@ class Util {
      * If unsuccessful, returns false.
      */
     static bool getUint32FromEnv(const char *envVarName, uint32_t *val);
+
+   /*
+    * This function attempts to extract a string value from
+    * the environment the program is executing in. If successful,
+    * the string is converted to all lowercase and returned via parameter.
+    */
+    static bool getLowercaseStrFromEnv(const char *envVarName, std::string *val);
 
  private:
 

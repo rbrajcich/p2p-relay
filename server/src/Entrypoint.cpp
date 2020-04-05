@@ -28,5 +28,10 @@ int entry() {
     }
 
     delete sessionTable;
+
+    logger.info("*********************************************");
+    logger.info("**       P2P Relay Server Shut Down        **");
+    logger.info("*********************************************");
+
     return 0;
 }

@@ -4,7 +4,7 @@
 namespace P2PRelay {
 
     int sampleApiFunction() {
-        usleep(10000000);
+        usleep(1000000);
         return 10;
     }
 

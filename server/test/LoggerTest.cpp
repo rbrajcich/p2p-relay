@@ -12,12 +12,6 @@ static void logMessages(Logger &logger) {
     logger.debug("debug log msg");
 }
 
-LOGGED_TEST(LoggerTests, LogLevelDefault) {
-    Logger::destroyLogger(); // Ensure we create a new logger
-    Logger &logger = Logger::getGlobalLogger();
-    EXPECT_EQ(logger.getLogLevel(), LogLevel::Info);
-}
-
 LOGGED_TEST(LoggerTests, LogLevelNone) {
     Logger &logger = Logger::getGlobalLogger();
     logger.setLogLevel(LogLevel::None);
