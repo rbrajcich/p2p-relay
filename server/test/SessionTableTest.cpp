@@ -62,7 +62,7 @@ LOGGED_TEST(SessionTableTests, LeaseIdRangeAndLimit) {
 
     SessionTable *table = createSessTableWith("10", "0");
     int i;
-    uint32_t id;
+    Session *session;
     bool idsLeased[10];
 
     for (i = 0; i < 10; i++) {
@@ -70,15 +70,15 @@ LOGGED_TEST(SessionTableTests, LeaseIdRangeAndLimit) {
     }
 
     for (i = 0; i < 10; i++) {
-        id = table->createSessionLease();
-        EXPECT_TRUE(id >= 0 && id < 10);
-        EXPECT_FALSE(idsLeased[id]);
-        idsLeased[id] = true;
+        session = table->createSessionLease();
+        EXPECT_TRUE(session->getId() >= 0 && session->getId() < 10);
+        EXPECT_FALSE(idsLeased[session->getId()]);
+        idsLeased[session->getId()] = true;
     }
 
     /* We want this to throw an error */
     try {
-        id = table->createSessionLease();
+        table->createSessionLease();
     } catch(OutOfSessionsError &err) {
         delete table;
         return;
@@ -87,57 +87,47 @@ LOGGED_TEST(SessionTableTests, LeaseIdRangeAndLimit) {
     FAIL() << "Expected OutOfSessionsError";
 }
 
-LOGGED_TEST(SessionTableTests, FreeOutOfBoundsId) {
+LOGGED_TEST(SessionTableTests, FreeSessionFromWrongTable) {
 
     SessionTable *table = createSessTableWith("10", "15");
+    SessionTable *table2 = createSessTableWith("10", "15");
 
     /* We want this to throw an error */
     try {
-        table->endSessionLease(14);
-        FAIL() << "Expected std::out_of_range";
-    } catch(std::out_of_range &err) {
+        table->endSessionLease(table2->createSessionLease());
+        FAIL() << "Expected WrongSessionTableError";
+    } catch(WrongSessionTableError &err) {
 
     } catch (...) {
-        FAIL() << "Expected std::out_of_range";
-    }
-
-        /* We want this to throw an error */
-    try {
-        table->endSessionLease(25);
-        FAIL() << "Expected std::out_of_range";
-    } catch(std::out_of_range &err) {
-
-    } catch (...) {
-        FAIL() << "Expected std::out_of_range";
+        FAIL() << "Expected WrongSessionTableError";
     }
 
     delete table;
+    delete table2;
 }
 
 LOGGED_TEST(SessionTableTests, LeaseAndLeaseAgain) {
     
     SessionTable *table = createSessTableWith("5", "0");
     int i;
-    uint32_t id, id2;
+    Session *sessions[5];
 
-    /* Lease all ids */
-    table->createSessionLease();
-    id = table->createSessionLease();
-    id2 = table->createSessionLease();
-    table->createSessionLease();
-    table->createSessionLease();
+    /* Lease all sessions */
+    for (i = 0; i < 5; i++) {
+        sessions[i] = table->createSessionLease();
+    }
 
     /* Make sure they re-queue in order to be leased again */
-    table->endSessionLease(id2);
-    table->endSessionLease(id);
-    EXPECT_EQ(table->createSessionLease(), id2);
-    EXPECT_EQ(table->createSessionLease(), id);
+    table->endSessionLease(sessions[2]);
+    table->endSessionLease(sessions[1]);
+    EXPECT_EQ(table->createSessionLease(), sessions[2]);
+    EXPECT_EQ(table->createSessionLease(), sessions[1]);
 
-    /* End all leased ids */
+    /* End all leases */
     for (i = 0; i < 5; i++) {
-        table->endSessionLease(i);
+        table->endSessionLease(sessions[i]);
     }
 
     /* Make sure nothing bad happens if we end an already-freed lease */
-    table->endSessionLease(id);
+    table->endSessionLease(sessions[2]);
 }

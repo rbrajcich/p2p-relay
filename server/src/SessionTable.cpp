@@ -29,6 +29,10 @@
 
 static Logger &logger = Logger::getGlobalLogger();
 
+uint32_t Session::getId() {
+    return id;
+}
+
 SessionTable::SessionTable() {
 
     bool success;
@@ -78,11 +82,13 @@ SessionTable::SessionTable() {
         sessions[i].active = false;
         sessions[i].prev = nullptr;
         sessions[i].next = &sessions[i+1];
+        sessions[i].table = this;
     }
     sessions[tableSize-1].id = curId;
     sessions[tableSize-1].active = false;
     sessions[tableSize-1].prev = nullptr;
     sessions[tableSize-1].next = nullptr;
+    sessions[tableSize-1].table = this;
     freeSessionsHead = &sessions[0];
     freeSessionsTail = &sessions[tableSize-1];
     activeSessionsHead = nullptr;
@@ -103,7 +109,7 @@ uint32_t SessionTable::getSessionIdStart() {
     return sessionIdStart;
 }
 
-uint32_t SessionTable::createSessionLease() {
+Session *SessionTable::createSessionLease() {
 
     if (freeSessionsHead == nullptr) {
         throw OutOfSessionsError();
@@ -119,16 +125,16 @@ uint32_t SessionTable::createSessionLease() {
     logger.debug("Creating session lease with id " + STR(sess->id));
     addActiveSession(sess);
     sess->active = true;
-    return sess->id;
+    return sess;
 }
 
-void SessionTable::endSessionLease(uint32_t id) {
+void SessionTable::endSessionLease(Session *sess) {
 
-    uint32_t idx = id - sessionIdStart;
-
-    if (idx >= tableSize) {
-        throw std::out_of_range("Session id not in range of table");
+    if (sess->table != this) {
+        throw WrongSessionTableError();
     }
+
+    uint32_t idx = sess->id - sessionIdStart;
 
     /* If active, move the session to the end of the free list */
     if (sessions[idx].active == true) {
