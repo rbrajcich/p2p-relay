@@ -8,6 +8,7 @@ class Timer {
     void (*callback)(void);
 
     Timer();
+    Timer(long millis, void (*func)(void));
     ~Timer();
 
     void setCallbackFunction(void (*func)(void));

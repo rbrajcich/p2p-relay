@@ -7,6 +7,18 @@ Timer::Timer() {
     isActive = false;
 }
 
+Timer::Timer(long millis, void (*func)(void)) {
+    isActive = false;
+    timeRemaining = millis;
+    callback = func;
+}
+
+Timer::~Timer() {
+    if (isActive) {
+        activeTimersListRemove(this);
+    }
+}
+
 void Timer::setCallbackFunction(void (*func)(void)) {
     callback = func;
 }
